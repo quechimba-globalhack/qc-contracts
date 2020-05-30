@@ -31,7 +31,8 @@ if [[ "$CREATE_TEST_ACCOUNTS" == "true" ]]; then
 fi
 
 echo "Initializing chain"
+echo "Deploying contract"
+$CLEOS_PATH set contract $MAIN_CONTRACT_NAME ./build/$MAIN_CONTRACT_NAME -p $MAIN_CONTRACT_NAME@active
 # Initializing chain
-$CLEOS_PATH -u $NODEOS_API push action $MAIN_CONTRACT_NAME init '[]' -p eosio@active
 
 echo "End initializing chain"
