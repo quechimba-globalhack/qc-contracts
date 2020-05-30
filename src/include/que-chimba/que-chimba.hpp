@@ -23,7 +23,8 @@ class [[eosio::contract( "qccontract" )]] qccontract : public contract {
   [[eosio::action]] void accreg(
       const name username, const string firstname, const string lastname ) const;
   // experience publish
-  [[eosio::action]] void expublish( const name owner, const id contendid ) const;
+  [[eosio::action]] void expublish(
+      const name owner, const eosio::checksum256 contendid ) const;
 
   // auction start
   [[eosio::action]] void atnstart( const name owner, const id auction ) const;
@@ -35,6 +36,9 @@ class [[eosio::contract( "qccontract" )]] qccontract : public contract {
   [[eosio::action]] void atnsubscribe( const name bkn, const id expid ) const;
   // auction bid
   [[eosio::action]] void atnbid( const name bkn, const float price, const id ) const;
+  // bakan basic register
+  [[eosio::action]] void bknregister(
+      const name user, const eosio::string name, const eosio::string surname );
 
  private:
   config_t     config;

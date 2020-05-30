@@ -31,17 +31,17 @@ typedef eosio::singleton<"globalconfig"_n, config> config_t;
 
 // Bakan table
 struct [[eosio::table, eosio::contract( "qccontract" )]] bkn {
-  id            bkn_id  = {};
+  eosio::name   bkn_id  = {};
   eosio::string name    = "";
   eosio::string surname = "";
 
-  auto primary_key() const { return bkn_id; }
+  auto primary_key() const { return bkn_id.value; }
 };
 typedef eosio::multi_index<"bkn"_n, bkn> bkn_t;
 
 // Experience table
 struct [[eosio::table, eosio::contract( "qccontract" )]] exp {
-  id                 exp_id = {};
+  id                 exp_id;
   eosio::checksum256 content;
   Date               start_date;
   uint32_t           places;
