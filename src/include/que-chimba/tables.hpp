@@ -30,14 +30,14 @@ typedef eosio::singleton<"globalconfig"_n, globalconfig> config_t;
 // TODO: Table to store superpowers allowed
 
 // Bakan table
-struct [[eosio::table, eosio::contract( "qccontract" )]] bkn {
-  eosio::name   bkn_id  = {};
+struct [[eosio::table, eosio::contract( "qccontract" )]] usr {
+  eosio::name   usrname = {};
   eosio::string name    = "";
   eosio::string surname = "";
 
-  auto primary_key() const { return bkn_id.value; }
+  auto primary_key() const { return usrname.value; }
 };
-typedef eosio::multi_index<"bkn"_n, bkn> bkn_t;
+typedef eosio::multi_index<"usr"_n, usr> usr_t;
 
 // Experience table
 struct [[eosio::table, eosio::contract( "qccontract" )]] exp {

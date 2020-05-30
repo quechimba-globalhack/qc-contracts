@@ -52,11 +52,11 @@ qccontract::usrregister(
   // Valid if the user exist in the chain
   require_auth( user );
   // Register if the user does not exist
-  auto itr = bkn.find( user.value );
-  eosio::check( itr == bkn.end(), "The bakan is already registered" );
-  if ( itr == bkn.end() ) {  // new user
-    bkn.emplace( user, [&]( auto& row ) {
-      row.bkn_id  = user;
+  auto itr = usr.find( user.value );
+  eosio::check( itr == usr.end(), "The user is already registered" );
+  if ( itr == usr.end() ) {  // new user
+    usr.emplace( user, [&]( auto& row ) {
+      row.usrname = user;
       row.name    = name;
       row.surname = surname;
     } );

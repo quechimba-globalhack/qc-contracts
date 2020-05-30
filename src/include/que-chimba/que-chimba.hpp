@@ -12,7 +12,7 @@ class [[eosio::contract( "qccontract" )]] qccontract : public contract {
   qccontract( const name self, const name receiver, datastream<const char*> ds )
       : eosio::contract( self, receiver, ds ),
         config( _self, _self.value ),
-        bkn( self, self.value ),
+        usr( self, self.value ),
         exp( self, self.value ),
         exp_subs( self, self.value ),
         actn( self, self.value ),
@@ -43,7 +43,7 @@ class [[eosio::contract( "qccontract" )]] qccontract : public contract {
 
  private:
   config_t     config;
-  bkn_t        bkn;
+  usr_t        usr;
   exp_t        exp;
   exp_subs_t   exp_subs;
   actn_t       actn;
