@@ -20,12 +20,12 @@ struct fibrange {
 };
 
 // Config table to store global configuration for the contract
-struct [[eosio::table, eosio::contract( "qccontract" )]] config {
+struct [[eosio::table, eosio::contract( "qccontract" )]] globalconfig {
   uint32_t auctime      = 120;
   fibrange actfbrange   = {};
   uint64_t subactnprice = 10;
 };
-typedef eosio::singleton<"globalconfig"_n, config> config_t;
+typedef eosio::singleton<"globalconfig"_n, globalconfig> config_t;
 
 // TODO: Table to store superpowers allowed
 
@@ -41,7 +41,8 @@ typedef eosio::multi_index<"bkn"_n, bkn> bkn_t;
 
 // Experience table
 struct [[eosio::table, eosio::contract( "qccontract" )]] exp {
-  id                 exp_id;
+  uint64_t           exp_id;
+  eosio::name        bkn_id;
   eosio::checksum256 content;
   Date               start_date;
   uint32_t           places;
@@ -51,9 +52,13 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] exp {
   uint64_t           pub_price;
   bool               sealed = false;
 
-  auto primary_key() const { return exp_id; }
+  uint64_t primary_key() const { return exp_id; }
+  uint64_t by_bkn() const { return bkn_id.value; }  // secondary index
 };
-typedef eosio::multi_index<"exp"_n, exp> exp_t;
+typedef eosio::multi_index<
+    "exp"_n, exp,
+    eosio::indexed_by<"bybkn"_n, eosio::const_mem_fun<exp, uint64_t, &exp::by_bkn>>>
+    exp_t;
 
 // Experience subscriber
 struct [[eosio::table, eosio::contract( "qccontract" )]] exp_subs {
@@ -95,7 +100,7 @@ typedef eosio::multi_index<
 struct [[eosio::table, eosio::contract( "qccontract" )]] bkn_exp {
   id       bkn_id;
   id       exp_id;
-  uint64_t final_price;  // Price by the experience was acquired
+  uint64_t final_price;  // Price which the experience was acquired
 
   auto primary_key() const { return bkn_id; }
   auto by_exp() const { return exp_id; }

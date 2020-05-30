@@ -3,14 +3,27 @@
 namespace quechimba {
 
 void
+qccontract::init() {
+  // Initialize global config table
+  globalconfig default_config;
+  config.get_or_create( _self, default_config );
+}
+
+void
 qccontract::accreg(
     const name username, const string firstname, const string lastname ) const {}
 
 // experience publish
 void
-qccontract::expublish( const name owner, const eosio::checksum256 contendid ) const {
+qccontract::expublish( const name owner, const eosio::checksum256& content ) {
+  // Valid if the user exist in the chain
   require_auth( owner );
-  eosio::print( "Hola Mundo" );
+  exp.emplace( owner, [&]( auto& row ) {
+    // Autoincrement id
+    row.exp_id  = exp.available_primary_key();
+    row.bkn_id  = owner;
+    row.content = content;
+  } );
 }
 
 // auction start
@@ -34,7 +47,7 @@ void
 qccontract::atnbid( const name bkn, const float price, const id ) const {}
 // bakan basic register
 void
-qccontract::bknregister(
+qccontract::usrregister(
     const name user, const eosio::string name, const eosio::string surname ) {
   // Valid if the user exist in the chain
   require_auth( user );

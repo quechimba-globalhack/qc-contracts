@@ -9,22 +9,23 @@ using namespace eosio;
 namespace quechimba {
 class [[eosio::contract( "qccontract" )]] qccontract : public contract {
  public:
-  qccontract( const name self, const name receiver, datastream<const char *> ds )
+  qccontract( const name self, const name receiver, datastream<const char*> ds )
       : eosio::contract( self, receiver, ds ),
-        config( self, self.value ),
+        config( _self, _self.value ),
         bkn( self, self.value ),
         exp( self, self.value ),
         exp_subs( self, self.value ),
         actn( self, self.value ),
         bkn_exp( self, self.value ),
         bid_record( self, self.value ) {}
-
+  // First action called in the contract to inialize some data
+  [[eosio::action]] void init();
   // account register
   [[eosio::action]] void accreg(
       const name username, const string firstname, const string lastname ) const;
   // experience publish
   [[eosio::action]] void expublish(
-      const name owner, const eosio::checksum256 contendid ) const;
+      const name owner, const eosio::checksum256& content );
 
   // auction start
   [[eosio::action]] void atnstart( const name owner, const id auction ) const;
@@ -37,7 +38,7 @@ class [[eosio::contract( "qccontract" )]] qccontract : public contract {
   // auction bid
   [[eosio::action]] void atnbid( const name bkn, const float price, const id ) const;
   // bakan basic register
-  [[eosio::action]] void bknregister(
+  [[eosio::action]] void usrregister(
       const name user, const eosio::string name, const eosio::string surname );
 
  private:

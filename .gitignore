@@ -4,3 +4,4 @@
 *.wasm
 .env
 *.log
+*.txt
