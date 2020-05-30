@@ -1,7 +1,6 @@
 ---
 BasedOnStyle: Google
 AlignAfterOpenBracket: AlwaysBreak
-AlignConsecutiveMacros: 'true'
 AlignConsecutiveAssignments: 'true'
 AlignConsecutiveDeclarations: 'true'
 AlignEscapedNewlines: Left

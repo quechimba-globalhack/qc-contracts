@@ -2,3 +2,6 @@
 .vscode/*.json
 *.abi
 *.wasm
+.env
+*.log
+*.txt
