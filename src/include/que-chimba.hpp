@@ -11,7 +11,9 @@ namespace quechimba
   {
   public:
     qccontract(const name self, const name receiver, datastream<const char *> ds) 
-      : eosio::contract(self, receiver, ds), bkn(self, self.value), exp(self, self.value) {}
+      : eosio::contract(self, receiver, ds), config(self, self.value), bkn(self, self.value), 
+      exp(self, self.value), exp_subs(self, self.value), actn(self, self.value), 
+      bkn_exp(self, self.value), bid_record(self, self.value)  {}
 
     // account register
     [[eosio::action]] void accreg(const name username, const string firstname, const string lastname) const;
@@ -30,7 +32,12 @@ namespace quechimba
     [[eosio::action]] void atnbid(const name bkn, const float price, const id ) const;
 
   private:
+    config_t config;
     bkn_t bkn;
     exp_t exp;
+    exp_subs_t exp_subs;
+    actn_t actn;
+    bkn_exp_t bkn_exp;
+    bid_record_t bid_record;
   };
 } // namespace quechimba
