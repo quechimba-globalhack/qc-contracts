@@ -1,4 +1,4 @@
-#/bin/bash!
+#!/bin/bash
 SRC_PATH=./src
 BUILD_PATH=./build/qccontract
 echo "Compiling with eosio-cpp"
