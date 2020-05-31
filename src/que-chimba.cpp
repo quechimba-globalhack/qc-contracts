@@ -7,6 +7,22 @@ qccontract::init() {
   // Initialize global config table
   globalconfig default_config;
   config.get_or_create( _self, default_config );
+  // Fill booster table
+  actnbooster.emplace( _self, [&]( auto& row ) {
+    row.id          = actnbooster.available_primary_key();
+    row.boost_id    = booster::booster_type::extra_bid;
+    row.description = "Give an extra bid at any time of the auction";
+  } );
+  actnbooster.emplace( _self, [&]( auto& row ) {
+    row.id          = actnbooster.available_primary_key();
+    row.boost_id    = booster::booster_type::time_machine;
+    row.description = "You can bid until N secs after the auction";
+  } );
+  actnbooster.emplace( _self, [&]( auto& row ) {
+    row.id          = actnbooster.available_primary_key();
+    row.boost_id    = booster::booster_type::midas_hand;
+    row.description = "You will have N extra lukas to use only in the bid";
+  } );
 }
 
 // experience publish
@@ -73,11 +89,21 @@ qccontract::atnstart(
 
 // auction request cancel
 void
-qccontract::atnrqcancel( const name owner, const id auction ) const {}
+qccontract::atnrqcancel( const name owner, const uint64_t actnid ) {
+  require_auth( owner );
+  // TODO: Validate that is an agency
+  auto itr = actn.find( actnid );
+  check( itr == actn.end(), "The auction does not exist" );
+  actn.modify( itr, owner, [&]( auto& row ) { row.req_cancel = true; } );
+}
 
-// auction reveal
-void
-qccontract::atnreveal( const name owner, const id auction ) const {}
+// auction reveal - reveal the price
+uint64_t
+qccontract::atnreveal( const name owner, const uint64_t& auction ) {
+  require_auth( owner );
+  // TODO: Validate is an agency
+  return 0;
+}
 
 // auction subscribe
 void

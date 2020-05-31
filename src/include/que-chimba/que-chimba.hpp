@@ -2,6 +2,7 @@
 
 #include <eosio/eosio.hpp>
 
+#include "../constants/global.hpp"
 #include "./tables.hpp"
 
 using eosio::check;
@@ -22,7 +23,8 @@ class [[eosio::contract( "qccontract" )]] qccontract : public eosio::contract {
         exp_subs( self, self.value ),
         actn( self, self.value ),
         bkn_exp( self, self.value ),
-        bid_record( self, self.value ) {}
+        bid_record( self, self.value ),
+        actnbooster( self, self.value ) {}
   // First action called in the contract to inialize some data
   [[eosio::action]] void init();
   // experience publish
@@ -34,9 +36,9 @@ class [[eosio::contract( "qccontract" )]] qccontract : public eosio::contract {
   [[eosio::action]] void atnstart(
       const name owner, const uint64_t& expid, const Date& start_date );
   // auction request cancel
-  [[eosio::action]] void atnrqcancel( const name owner, const id auction ) const;
-  // auction reveal
-  [[eosio::action]] void atnreveal( const name owner, const id auction ) const;
+  [[eosio::action]] void atnrqcancel( const name owner, const uint64_t actnid );
+  // auction reveal - Reveal the price
+  [[eosio::action]] uint64_t atnreveal( const name owner, const uint64_t& auction );
   // auction subscribe
   [[eosio::action]] void expsubscribe( const name bkn, const uint64_t& expid );
   // auction bid
@@ -55,12 +57,13 @@ class [[eosio::contract( "qccontract" )]] qccontract : public eosio::contract {
   static inline time_point_sec current_time_point_sec() {
     return time_point_sec( current_time_point() );
   }
-  config_t     config;
-  usr_t        usr;
-  exp_t        exp;
-  exp_subs_t   exp_subs;
-  actn_t       actn;
-  bkn_exp_t    bkn_exp;
-  bid_record_t bid_record;
+  config_t      config;
+  usr_t         usr;
+  exp_t         exp;
+  exp_subs_t    exp_subs;
+  actn_t        actn;
+  bkn_exp_t     bkn_exp;
+  bid_record_t  bid_record;
+  actnbooster_t actnbooster;
 };
 }  // namespace quechimba

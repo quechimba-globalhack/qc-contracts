@@ -5,7 +5,6 @@
 #include <eosio/singleton.hpp>
 #include <eosio/string.hpp>
 #include <eosio/time.hpp>
-#include <tuple>
 
 using eosio::const_mem_fun;
 using eosio::name;
@@ -38,7 +37,21 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] globalconfig {
 };
 typedef eosio::singleton<"globalconfig"_n, globalconfig> config_t;
 
-// TODO: Table to store superpowers allowed
+// Table to store superpowers allowed
+struct [[eosio::table, eosio::contract( "qccontract" )]] booster {
+  enum booster_type { extra_bid = 0x0, time_machine = 0x01, midas_hand = 0x02 };
+  uint64_t    id;
+  uint64_t    boost_id;
+  std::string description;
+
+  uint64_t primary_key() const { return id; }
+  auto     by_boost_id() const { return boost_id; }
+};
+typedef eosio::multi_index<
+    "booster"_n, booster,
+    eosio::indexed_by<
+        "byboost"_n, const_mem_fun<booster, uint64_t, &booster::by_boost_id>>>
+    actnbooster_t;
 
 // Bakan table
 struct [[eosio::table, eosio::contract( "qccontract" )]] usr {
@@ -80,11 +93,12 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] exp_subs {
   name     bkn_id;
   Date     created_at;
   // Indices
-  auto      primary_key() const { return exp_sub_id; }
-  auto      by_exp() const { return exp_id; }
+  uint64_t  primary_key() const { return exp_sub_id; }
+  uint64_t  by_exp() const { return exp_id; }
   uint128_t by_exp_bkn() const { return _by_exp_bkn( exp_id, bkn_id ); }
 
   static uint128_t _by_exp_bkn( uint64_t expid, name bknid ) {
+    // Left Shift 64 bits expId, then paply bitwise OR operator with bknid
     return ( uint128_t{expid} << 64 ) | bknid.value;
   }
 
@@ -105,6 +119,7 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] actn {
   Date     start_date;
   uint16_t duration;  // Duration in mins
   uint64_t highest_bid = 0;
+  bool     req_cancel  = false;
   Date     created_at;
 
   auto primary_key() const { return actn_id; }
@@ -132,23 +147,25 @@ typedef eosio::multi_index<
     bkn_exp_t;
 
 struct [[eosio::table, eosio::contract( "qcontract" )]] bid_record {
-  id       bid_id;
-  id       bkn_id;
-  id       exp_id;
+  uint64_t bid_id;
+  uint64_t bkn_id;
+  uint64_t actn_id;
   uint64_t price;
   uint16_t current_fib;  // Current fibonacci number of the bakan
   Date     created_at;
-  // TODO: superpower optional
-  auto primary_key() const { return bid_id; }
-  auto by_exp() const { return exp_id; }
-  auto by_bkn() const { return bkn_id; }
+  uint64_t booster_id;  // Booster optional
+  uint64_t primary_key() const { return bid_id; }
+  uint64_t by_actn() const { return actn_id; }
+  uint64_t by_bkn() const { return bkn_id; }
 };
 
 // https://eosio-cpp.readme.io/v1.1.0/docs/using-multi-index-tables
 typedef eosio::multi_index<
     "bidrecord"_n, bid_record,
-    eosio::indexed_by<"byexp"_n, const_mem_fun<bid_record, id, &bid_record::by_exp>>,
-    eosio::indexed_by<"bybkn"_n, const_mem_fun<bid_record, id, &bid_record::by_bkn>>>
+    eosio::indexed_by<
+        "byactn"_n, const_mem_fun<bid_record, uint64_t, &bid_record::by_actn>>,
+    eosio::indexed_by<
+        "bybkn"_n, const_mem_fun<bid_record, uint64_t, &bid_record::by_bkn>>>
     bid_record_t;
 
 }  // namespace quechimba
