@@ -195,6 +195,7 @@ qccontract::atnbid(
   actn.modify( itr, bkn, [&]( auto& row ) {
     row.highest_bid = price;
     row.bkn         = bkn;
+    row.counter     = itr->counter + 1;
   } );
   // Emplace bid table
   bid_record.emplace( bkn, [&]( auto& row ) {

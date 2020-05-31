@@ -45,6 +45,10 @@
                     "type": "name"
                 },
                 {
+                    "name": "counter",
+                    "type": "uint64"
+                },
+                {
                     "name": "req_cancel",
                     "type": "bool"
                 },

@@ -122,7 +122,8 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] actn {
   uint16_t duration;     // Duration in mins
   asset    start_value;  // Start auction value, the same value is in experience
   asset    highest_bid;  // Current highest bid
-  name     bkn;          // Bakan with the highest bid
+  name     bkn;          // Bakan with the highest
+  uint64_t counter;
   bool     req_cancel = false;
   Date     created_at;
 
