@@ -1,0 +1,553 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [
+        {
+            "new_type_name": "Date",
+            "type": "time_point_sec"
+        },
+        {
+            "new_type_name": "Hash",
+            "type": "checksum256"
+        }
+    ],
+    "structs": [
+        {
+            "name": "actn",
+            "base": "",
+            "fields": [
+                {
+                    "name": "actn_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "exp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "start_date",
+                    "type": "Date"
+                },
+                {
+                    "name": "duration",
+                    "type": "uint16"
+                },
+                {
+                    "name": "start_value",
+                    "type": "asset"
+                },
+                {
+                    "name": "highest_bid",
+                    "type": "asset"
+                },
+                {
+                    "name": "bkn",
+                    "type": "name"
+                },
+                {
+                    "name": "req_cancel",
+                    "type": "bool"
+                },
+                {
+                    "name": "created_at",
+                    "type": "Date"
+                }
+            ]
+        },
+        {
+            "name": "atnbid",
+            "base": "",
+            "fields": [
+                {
+                    "name": "bkn",
+                    "type": "name"
+                },
+                {
+                    "name": "bidprice",
+                    "type": "uint64"
+                },
+                {
+                    "name": "actnid",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "atnreveal",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "auction",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "atnrqcancel",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "actnid",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "atnstart",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "expid",
+                    "type": "uint64"
+                },
+                {
+                    "name": "start_date",
+                    "type": "Date"
+                }
+            ]
+        },
+        {
+            "name": "balance",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "bid_record",
+            "base": "",
+            "fields": [
+                {
+                    "name": "bid_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "bkn_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "actn_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "current_fib",
+                    "type": "uint16"
+                },
+                {
+                    "name": "created_at",
+                    "type": "Date"
+                },
+                {
+                    "name": "booster_id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "bkn_exp",
+            "base": "",
+            "fields": [
+                {
+                    "name": "bkn_exp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "bkn_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "exp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "final_price",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "booster",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "boost_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "calcengexp",
+            "base": "",
+            "fields": [
+                {
+                    "name": "idexp",
+                    "type": "uint64"
+                },
+                {
+                    "name": "places",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "deletedata",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "exp",
+            "base": "",
+            "fields": [
+                {
+                    "name": "exp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "bkn_id",
+                    "type": "name"
+                },
+                {
+                    "name": "content",
+                    "type": "Hash"
+                },
+                {
+                    "name": "start_date",
+                    "type": "Date"
+                },
+                {
+                    "name": "places",
+                    "type": "uint32"
+                },
+                {
+                    "name": "base_val",
+                    "type": "asset"
+                },
+                {
+                    "name": "maxactntdate",
+                    "type": "Date"
+                },
+                {
+                    "name": "engagement",
+                    "type": "uint16"
+                },
+                {
+                    "name": "pub_price",
+                    "type": "uint64"
+                },
+                {
+                    "name": "sealed",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "exp_subs",
+            "base": "",
+            "fields": [
+                {
+                    "name": "exp_sub_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "exp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "bkn_id",
+                    "type": "name"
+                },
+                {
+                    "name": "created_at",
+                    "type": "Date"
+                }
+            ]
+        },
+        {
+            "name": "exppublish",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "content",
+                    "type": "Hash"
+                },
+                {
+                    "name": "start_exp",
+                    "type": "Date"
+                },
+                {
+                    "name": "places",
+                    "type": "uint32"
+                },
+                {
+                    "name": "baseprice",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "expsubscribe",
+            "base": "",
+            "fields": [
+                {
+                    "name": "bkn",
+                    "type": "name"
+                },
+                {
+                    "name": "expid",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "fibrange",
+            "base": "",
+            "fields": [
+                {
+                    "name": "min",
+                    "type": "uint16"
+                },
+                {
+                    "name": "max",
+                    "type": "uint16"
+                }
+            ]
+        },
+        {
+            "name": "globalconfig",
+            "base": "",
+            "fields": [
+                {
+                    "name": "actntime",
+                    "type": "uint32"
+                },
+                {
+                    "name": "actnbrange",
+                    "type": "fibrange"
+                },
+                {
+                    "name": "subactnprice",
+                    "type": "uint64"
+                },
+                {
+                    "name": "startexpdays",
+                    "type": "uint8"
+                },
+                {
+                    "name": "maxstartactn",
+                    "type": "uint8"
+                },
+                {
+                    "name": "engpct",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "init",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "ping",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "usr",
+            "base": "",
+            "fields": [
+                {
+                    "name": "usrname",
+                    "type": "name"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "surname",
+                    "type": "string"
+                },
+                {
+                    "name": "role",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "usrregister",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "surname",
+                    "type": "string"
+                },
+                {
+                    "name": "role",
+                    "type": "uint8"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "atnbid",
+            "type": "atnbid",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "atnreveal",
+            "type": "atnreveal",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "atnrqcancel",
+            "type": "atnrqcancel",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "atnstart",
+            "type": "atnstart",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "balance",
+            "type": "balance",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "calcengexp",
+            "type": "calcengexp",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "deletedata",
+            "type": "deletedata",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "exppublish",
+            "type": "exppublish",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "expsubscribe",
+            "type": "expsubscribe",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "init",
+            "type": "init",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "ping",
+            "type": "ping",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "usrregister",
+            "type": "usrregister",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "actn",
+            "type": "actn",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "bidrecord",
+            "type": "bid_record",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "bknexp",
+            "type": "bkn_exp",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "booster",
+            "type": "booster",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "exp",
+            "type": "exp",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "expsubs",
+            "type": "exp_subs",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "globalconfig",
+            "type": "globalconfig",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "usr",
+            "type": "usr",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}
