@@ -1,14 +1,15 @@
 #pragma once
 
+#include <eosio/asset.hpp>
 #include <eosio/eosio.hpp>
 
+#include "../constants/global.hpp"
 #include "./tables.hpp"
 
+using eosio::asset;
 using eosio::check;
 using eosio::current_time_point;
 using eosio::datastream;
-using eosio::days;
-using eosio::string;
 using eosio::time_point_sec;
 
 namespace quechimba {
@@ -22,49 +23,59 @@ class [[eosio::contract( "qccontract" )]] qccontract : public eosio::contract {
         exp_subs( self, self.value ),
         actn( self, self.value ),
         bkn_exp( self, self.value ),
-        bid_record( self, self.value ) {}
+        bid_record( self, self.value ),
+        actnbooster( self, self.value ) {}
   // First action called in the contract to inialize some data
   [[eosio::action]] void init();
-  // account register
-  [[eosio::action]] void accreg(
-      const name username, const string firstname, const string lastname ) const;
   // experience publish
-  [[eosio::action]] void expublish(
+  [[eosio::action]] void exppublish(
       const name owner, const Hash& content, const Date& start_exp,
       const uint32_t& places, const uint64_t& baseprice );
 
   // auction start
-  [[eosio::action]] void atnstart( const name owner, const id auction ) const;
+  [[eosio::action]] void atnstart(
+      const name owner, const uint64_t& expid, const Date& start_date );
   // auction request cancel
-  [[eosio::action]] void atnrqcancel( const name owner, const id auction ) const;
-  // auction reveal
-  [[eosio::action]] void atnreveal( const name owner, const id auction ) const;
+  [[eosio::action]] void atnrqcancel( const name owner, const uint64_t actnid );
+  // auction reveal - Reveal the price
+  [[eosio::action]] uint64_t atnreveal( const name owner, const uint64_t& auction );
   // auction subscribe
-  [[eosio::action]] void atnsubscribe( const name bkn, const id expid ) const;
+  [[eosio::action]] void expsubscribe( const name bkn, const uint64_t& expid );
   // auction bid
-  [[eosio::action]] void atnbid( const name bkn, const float price, const id ) const;
+  [[eosio::action]] void atnbid(
+      const name bkn, const uint64_t& bidprice, const uint64_t& actnid );
   // bakan basic register
   [[eosio::action]] void usrregister(
-      const name user, const string& name, const string& surname, uint8_t& rol );
+      const name user, const eosio::string& name, const eosio::string& surname,
+      uint8_t& role );
   // Action to delete data, just for dev
   [[eosio::action]] void deletedata();
+  // Ping action
+  [[eosio::action]] uint64_t ping();
+
+  // ******* READ ONLY ACTIONS ********
+  [[eosio::action]] uint32_t calcengexp(
+      const uint64_t idexp, const uint32_t& places );
+  //  Get balance
+  [[eosio::action]] asset balance( const name user );
+
+  // TEST ACTION
+  // [[eosio::action]] void sendtoalice();
 
  private:
-  // // 3 months in seconds (Computatio: 6 months * average days per month * 24 hours
-  // *
-  // // 60 minutes * 60 seconds)
-  // constexpr static uint32_t THREE_MONTHS_IN_SECONDS =
-  //     ( uint32_t )( 3 * ( 365.25 / 12 ) * 24 * 60 * 60 );
-
   static inline time_point_sec current_time_point_sec() {
     return time_point_sec( current_time_point() );
   }
-  config_t     config;
-  usr_t        usr;
-  exp_t        exp;
-  exp_subs_t   exp_subs;
-  actn_t       actn;
-  bkn_exp_t    bkn_exp;
-  bid_record_t bid_record;
+  static inline uint32_t days_to_sec( uint32_t number_days ) {
+    return number_days * 24 * 60 * 60;
+  }
+  config_t      config;
+  usr_t         usr;
+  exp_t         exp;
+  exp_subs_t    exp_subs;
+  actn_t        actn;
+  bkn_exp_t     bkn_exp;
+  bid_record_t  bid_record;
+  actnbooster_t actnbooster;
 };
 }  // namespace quechimba
