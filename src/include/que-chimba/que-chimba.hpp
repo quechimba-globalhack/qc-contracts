@@ -25,37 +25,33 @@ class [[eosio::contract( "qccontract" )]] qccontract : public eosio::contract {
         bid_record( self, self.value ) {}
   // First action called in the contract to inialize some data
   [[eosio::action]] void init();
-  // account register
-  [[eosio::action]] void accreg(
-      const name username, const string firstname, const string lastname ) const;
   // experience publish
   [[eosio::action]] void expublish(
       const name owner, const Hash& content, const Date& start_exp,
       const uint32_t& places, const uint64_t& baseprice );
 
   // auction start
-  [[eosio::action]] void atnstart( const name owner, const id auction ) const;
+  [[eosio::action]] void atnstart(
+      const name owner, const uint64_t& expid, const Date& start_date );
   // auction request cancel
   [[eosio::action]] void atnrqcancel( const name owner, const id auction ) const;
   // auction reveal
   [[eosio::action]] void atnreveal( const name owner, const id auction ) const;
   // auction subscribe
-  [[eosio::action]] void atnsubscribe( const name bkn, const id expid ) const;
+  [[eosio::action]] void expsubscribe( const name bkn, const uint64_t& expid );
   // auction bid
-  [[eosio::action]] void atnbid( const name bkn, const float price, const id ) const;
+  [[eosio::action]] void atnbid( const name bkn, const float price, const id );
   // bakan basic register
   [[eosio::action]] void usrregister(
-      const name user, const string& name, const string& surname, uint8_t& rol );
+      const name user, const string& name, const string& surname, uint8_t& role );
   // Action to delete data, just for dev
   [[eosio::action]] void deletedata();
 
- private:
-  // // 3 months in seconds (Computatio: 6 months * average days per month * 24 hours
-  // *
-  // // 60 minutes * 60 seconds)
-  // constexpr static uint32_t THREE_MONTHS_IN_SECONDS =
-  //     ( uint32_t )( 3 * ( 365.25 / 12 ) * 24 * 60 * 60 );
+  // ******* READ ONLY ACTIONS ********
+  [[eosio::action]] uint32_t calcengexp(
+      const uint64_t idexp, const uint32_t& places );
 
+ private:
   static inline time_point_sec current_time_point_sec() {
     return time_point_sec( current_time_point() );
   }

@@ -1,9 +1,11 @@
 #pragma once
 
+#include <eosio/crypto.hpp>
 #include <eosio/eosio.hpp>
 #include <eosio/singleton.hpp>
 #include <eosio/string.hpp>
 #include <eosio/time.hpp>
+#include <tuple>
 
 using eosio::const_mem_fun;
 using eosio::name;
@@ -26,12 +28,13 @@ struct fibrange {
 
 // Config table to store global configuration for the contract
 struct [[eosio::table, eosio::contract( "qccontract" )]] globalconfig {
-  uint32_t auctime      = 120;  // Default auction time in minutes
-  fibrange actfbrange   = {};   // Fibonacci range to handle bids
+  uint32_t actntime     = 120;  // Default auction time in minutes
+  fibrange actnbrange   = {};   // Fibonacci range to handle bids
   uint64_t subactnprice = 10;   // Default auction price in lks
   uint8_t  startexpdays = 90;   // Min days from now to start the experience
-  uint8_t  maxstartctn  = 60;   // Max days to start the auction (Exp Start Date -
+  uint8_t  maxstartactn = 60;   // Max days to start the auction (Exp Start Date -
                                 // maxstartctn = Max Date to start the auction)
+  uint8_t engpct = 110;         // Percentage engagement. NumCupos * engpct
 };
 typedef eosio::singleton<"globalconfig"_n, globalconfig> config_t;
 
@@ -39,11 +42,11 @@ typedef eosio::singleton<"globalconfig"_n, globalconfig> config_t;
 
 // Bakan table
 struct [[eosio::table, eosio::contract( "qccontract" )]] usr {
-  enum rol_type { bakan = 0x0, agency = 0x01 };
+  enum role_type { bakan = 0x0, agency = 0x01 };
   name          usrname = {};
   eosio::string name    = "";
   eosio::string surname = "";
-  uint8_t       rol;
+  uint8_t       role;
 
   auto primary_key() const { return usrname.value; }
 };
@@ -72,28 +75,37 @@ typedef eosio::multi_index<
 
 // Experience subscriber
 struct [[eosio::table, eosio::contract( "qccontract" )]] exp_subs {
-  id   exp_id;
-  id   bkn_id;
-  Date created_at;
+  uint64_t exp_sub_id;
+  uint64_t exp_id;
+  name     bkn_id;
+  Date     created_at;
+  // Indices
+  auto      primary_key() const { return exp_sub_id; }
+  auto      by_exp() const { return exp_id; }
+  uint128_t by_exp_bkn() const { return _by_exp_bkn( exp_id, bkn_id ); }
 
-  auto primary_key() const { return exp_id; }
-  // Secondary index by exp
-  auto by_bkn() const { return bkn_id; }  // secondary index
-};
+  static uint128_t _by_exp_bkn( uint64_t expid, name bknid ) {
+    return ( uint128_t{expid} << 64 ) | bknid.value;
+  }
+
+};  // namespace quechimba
+
 typedef eosio::multi_index<
     "expsubs"_n, exp_subs,
-    eosio::indexed_by<"bybkn"_n, const_mem_fun<exp_subs, id, &exp_subs::by_bkn>>>
+    eosio::indexed_by<
+        "byexp"_n, const_mem_fun<exp_subs, uint64_t, &exp_subs::by_exp>>,
+    eosio::indexed_by<
+        "byexpbkn"_n, const_mem_fun<exp_subs, uint128_t, &exp_subs::by_exp_bkn>>>
     exp_subs_t;
 
 // Auction table
 struct [[eosio::table, eosio::contract( "qccontract" )]] actn {
-  id       actn_id;
-  id       exp_id;
-  Date     actn_start;
-  uint16_t actn_time;  // how long the auction will last
-  uint64_t highest_bid;
+  uint64_t actn_id;
+  uint64_t exp_id;
+  Date     start_date;
+  uint16_t duration;  // Duration in mins
+  uint64_t highest_bid = 0;
   Date     created_at;
-  uint64_t age;
 
   auto primary_key() const { return actn_id; }
   // Secondary index by exp
@@ -102,7 +114,7 @@ struct [[eosio::table, eosio::contract( "qccontract" )]] actn {
 
 typedef eosio::multi_index<
     "actn"_n, actn,
-    eosio::indexed_by<"byexp"_n, const_mem_fun<actn, id, &actn::by_exp>>>
+    eosio::indexed_by<"byexp"_n, const_mem_fun<actn, uint64_t, &actn::by_exp>>>
     actn_t;
 
 // Table to store exp by bkn (experience that have been assigned)

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qc-contracts
+  labels:
+    app: qc-contracts
+spec:
+  clusterIP: None
+  ports:
+    - port: 8888
+      name: qc-contracts
+  selector:
+    app: qc-contracts
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qc-contracts
+  labels:
+    app: qc-contracts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qc-contracts
+  template:
+    metadata:
+      labels:
+        app: qc-contracts
+    spec:
+      containers:
+        - name: qc-contracts
+          image: qc-contracts
+          ports:
+            - name: http
+              containerPort: 8081
