@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit on fail
+set -eu
+
 set -a # automatically export all variables
 source .env
 set +a
@@ -10,7 +13,7 @@ $CLEOS_PATH -u $NODEOS_API wallet list
 echo "Sleeping to ensure keosd has a chance to start"
 sleep 10
 
-cd /
+# cd /
 
 echo "Importing system keys"
 $CLEOS_PATH -u $NODEOS_API wallet create -n qc-wallet --file qc-wallet.txt
@@ -27,12 +30,14 @@ if [[ "$CREATE_TEST_ACCOUNTS" == "true" ]]; then
   $CLEOS_PATH -u $NODEOS_API create account eosio bob $SYSTEM_ACCOUNT_PUB_KEY -p eosio@active
   $CLEOS_PATH -u $NODEOS_API create account eosio alice $SYSTEM_ACCOUNT_PUB_KEY -p eosio@active
   $CLEOS_PATH -u $NODEOS_API create account eosio james $SYSTEM_ACCOUNT_PUB_KEY -p eosio@active
+  $CLEOS_PATH -u $NODEOS_API create account eosio agency1 $SYSTEM_ACCOUNT_PUB_KEY -p eosio@active
+  $CLEOS_PATH -u $NODEOS_API create account eosio agency2 $SYSTEM_ACCOUNT_PUB_KEY -p eosio@active
   echo "Done create test user"
 fi
 
-echo "Initializing chain"
+# Build contract optional
+# sh ./build.sh
+
 echo "Deploying contract"
 $CLEOS_PATH set contract $MAIN_CONTRACT_NAME ./build/$MAIN_CONTRACT_NAME -p $MAIN_CONTRACT_NAME@active
-# Initializing chain
-
-echo "End initializing chain"
+echo "End Deploying contract"
