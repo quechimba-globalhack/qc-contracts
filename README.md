@@ -159,7 +159,6 @@ The engagement measures the interaction with an specific experience. For now (MV
 engagement = ( subscribers * 100 ) / ( # min places of experience * #MIN_ENGAGEMENTE_PERCENTAGE )
 ```
 This returns a number, if the number is greater than 1, the experience can start.
-- % interés, engagement - (Se va a ir llenando con la interacción). MVP (número de personas interesadas (suscriptores) > 1.10 * #cupos  (100% corazon) , si hay mas es mas del 100% entonces demos mostrar gráficamente eso y devolver ese valor en el contrato). Ya puedo iniciar la subasta.
 
 # Finally
 💪🏻 Every comment is welcomed. Feel free to ask or contribute. This is a WIP product.
